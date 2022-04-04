@@ -4,17 +4,37 @@ var forecastLength = 5;
 const apiKey = "85b2f1bdec6377177c781dc904257b09";
 var cityInput = document.getElementById('city-input');
 var searchBtn = document.getElementById('search');
+let cityName = "Toronto";
+
 
 let apiURL;
 
-const cities = {
+const city = {
   'toronto': {
     'location': {
       'lat': "43.6532",
       'long': "79.3832",
     }
   },
+  'montreal': {
+    'location': {
+      'lat': 40.7128,
+      'long': 74.0060,
+    }
+  },
+  'vancouver': {
+    'location': {
+      'lat': 40.7128,
+      'long': 74.0060,
+    }
+  },
   'new york city': {
+    'location': {
+      'lat': 40.7128,
+      'long': 74.0060,
+    }
+  },
+  'tokyo': {
     'location': {
       'lat': 40.7128,
       'long': 74.0060,
@@ -41,17 +61,14 @@ var getWeather = (city) => {
   });
 };
 
-
 var displayWeather = (list) => {
   // console.log(list);
   for (var i = 0; i < forecastLength; i++) {
     var temperature = list.list[i].main.temp;
     var wind = list.list[i].wind.speed;
     var humidity = list.list[i].main.humidity;
-    // var forecastDate = 5;
     var forecastDate = list.list[i].dt_txt;
     // var uv_index = list[i].main.humidity;
-
 
     // create forecast card wrapper div
     var forecastWrapperEL = document.createElement("div");
@@ -62,46 +79,49 @@ var displayWeather = (list) => {
     // create forecast card div
     var forecastCardEl = document.createElement("div");
     forecastWrapperEL.setAttribute('id', "forecast-card");
-    forecastCardEl.classList = "col bg-warning py-1 px-3";
+    forecastCardEl.classList = "col bg-warning p-3 rounded border";
 
     var forecastDateTextEl = document.createElement('p');
     forecastDateTextEl.setAttribute('id', 'forecast-date');
-    forecastDateTextEl.classList = "fw-bold";
+    forecastDateTextEl.classList = "fw-bold d-flex flex-wrap";
     forecastDateTextEl.textContent = forecastDate;
+    var forecastDateSpanEl = document.createElement('span');
+    forecastDateSpanEl.classList = "mx-2 d-flex flex-wrap";
+    forecastDateTextEl.appendChild(forecastDateSpanEl);
     forecastCardEl.appendChild(forecastDateTextEl);
 
     // create temperature element to hold temp data
     var tempTextEl = document.createElement('p');
     tempTextEl.setAttribute('id', "temperature");
-    tempTextEl.classList = "fw-bold";
+    tempTextEl.classList = "fw-bold d-flex flex-wrap";
     tempTextEl.textContent = "Temp:";
     var tempSpanEl = document.createElement('span');
     tempSpanEl.setAttribute('id', "temp-data");
-    tempSpanEl.classList = "mx-2";
+    tempSpanEl.classList = "mx-2 d-flex flex-wrap";
     tempSpanEl.textContent = temperature + "ºC";
     tempTextEl.appendChild(tempSpanEl);
     forecastCardEl.appendChild(tempTextEl);
 
     // create wind element to hold wind data
     var windTextEl = document.createElement('p');
-    forecastWrapperEL.setAttribute('id', "wind");
+    windTextEl.setAttribute('id', "wind");
     windTextEl.classList = "fw-bold";
     windTextEl.textContent = "Wind:"
     var windSpanEl = document.createElement('span');
     windSpanEl.setAttribute('id', "wind-data");
-    windSpanEl.classList = "mx-2";
+    windSpanEl.classList = "mx-2 d-flex flex-wrap";
     windSpanEl.textContent = wind + " km/h";
     windTextEl.appendChild(windSpanEl);
     forecastCardEl.appendChild(windTextEl);
 
     // create humidity element to hold humidity data
     var humidityTextEl = document.createElement('p');
-    forecastWrapperEL.setAttribute('id', "humidity");
+    humidityTextEl.setAttribute('id', "humidity");
     humidityTextEl.classList = "fw-bold";
     humidityTextEl.textContent = "Humidity:"
     var humiditySpanEl = document.createElement('span');
     humiditySpanEl.setAttribute('id', "humidity-data");
-    humiditySpanEl.classList = "mx-2";
+    humiditySpanEl.classList = "mx-2 d-flex flex-wrap";
     humiditySpanEl.textContent = humidity;
     humidityTextEl.appendChild(humiditySpanEl);
     forecastCardEl.appendChild(humidityTextEl);
@@ -119,18 +139,21 @@ var displayWeather = (list) => {
 
     // append inner html elements to forecast wrapper
     forecastWrapperEL.appendChild(forecastCardEl);
-    // forecastRow.appendChild(forecastWrapperEL);
   }
-
 };
+var cityBtn = document.getElementById('#city', 'button');
 
-searchBtn.addEventListener('click', getCity = (cityName) => {
+
+var getCity = (cityName) => {
   if (!cityInput.value) {
     console.log('Need a city to search.')
   }
   else {
     cityName = cityInput.value;
-    console.log(cityName);
+    console.log('Fetching weather data for:', cityName);
     getWeather(cityName);
   }
-});
+};
+
+searchBtn.addEventListener('click', getCity);
+
